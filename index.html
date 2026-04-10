@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Cursos Avançada</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="#" data-view="view-dashboard">Online Academy</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-view="view-catalogo">Catálogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-view="view-minhas-aulas">Minhas Aulas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-view="view-financeiro">Assinaturas</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-warning" href="#" id="adminDrops" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Gestão Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDrops">
+                            <li><a class="dropdown-item" href="#" data-view="view-cursos">Painel de Cursos</a></li>
+                            <li><a class="dropdown-item" href="#" data-view="view-conteudo">Estrutura de Conteúdo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-info btn-sm ms-3 text-white" id="btnSairSimulado" href="#" style="display:none;">Deslogar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container Container views -->
+    <main class="container">
+        
+        <!-- View: Dashboard Default -->
+        <section id="view-dashboard" class="view" style="display: none;">
+            <h2 class="mb-4">Visão Geral</h2>
+            <div id="dash-stats" class="row text-center mb-4"></div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="p-5 bg-surface text-center rounded-3 border">
+                        <h1 class="text-primary fw-bold">Bem vindo a Online Academy</h1>
+                        <p class="lead text-secondary">Navegue pelas rotas no menu acima para acessar a área administrativa ou do aluno.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Login / Cadastro Simulado -->
+        <section id="view-login" class="view" style="display: none;">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6">
+                    <div class="card p-4">
+                        <h3 class="text-center mb-4 text-primary">Acesso de Aluno</h3>
+                        <form id="formAuthSimulado">
+                            <div class="mb-3">
+                                <label for="authNome" class="form-label text-light">Nome Completo</label>
+                                <input type="text" id="authNome" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="authEmail" class="form-label text-light">E-mail</label>
+                                <input type="email" id="authEmail" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="authSenha" class="form-label text-light">Senha</label>
+                                <input type="password" id="authSenha" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mb-2">Entrar / Cadastrar</button>
+                            <p class="text-light text-center small">No ambiente simulado, novas credenciais disparam auto-cadastro imediatamente.</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Gestao de Cursos -->
+        <section id="view-cursos" class="view" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2>Gestão de Cursos</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNovoCurso">+ Novo Curso</button>
+            </div>
+            
+            <div class="mb-3 col-md-4">
+                <label for="filterCategoria" class="form-label text-warning mb-0"><strong>Filtro por Categoria:</strong></label>
+                <select id="filterCategoria" class="form-select mt-1 bg-dark text-white border-secondary">
+                    <option value="">Todas as Categorias</option>
+                </select>
+            </div>
+
+            <div id="tableCursos" class="table-responsive rounded shadow-sm border"></div>
+        </section>
+
+        <!-- View: Estrutura de Conteudo (Aulas e Modulos) -->
+        <section id="view-conteudo" class="view" style="display: none;">
+            <h2 class="mb-4">Construtor de Currículo</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <label for="cursoSelecionadoModulo" class="form-label text-light">1. Selecione o Curso Foco:</label>
+                    <select id="cursoSelecionadoModulo" class="form-select border-primary bg-dark text-white"></select>
+                </div>
+            </div>
+
+            <div id="paineisConteudo" class="row" style="display: none;">
+                <!-- Modulos -->
+                <div class="col-md-5 mb-4">
+                    <div class="card border-warning">
+                        <div class="card-header bg-warning text-dark"><strong>Adicionar Módulo</strong></div>
+                        <div class="card-body">
+                            <form id="formNovoModulo">
+                                <div class="mb-3">
+                                    <label for="modTitulo" class="form-label text-light">Título do Módulo</label>
+                                    <input type="text" id="modTitulo" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="modOrdem" class="form-label text-light">Ordem (Posição)</label>
+                                    <input type="number" id="modOrdem" class="form-control" min="1" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning text-dark w-100">Salvar Módulo</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aulas -->
+                <div class="col-md-7 mb-4">
+                    <div class="card border-info">
+                        <div class="card-header bg-info text-dark"><strong>Adicionar Aula a um Módulo</strong></div>
+                        <div class="card-body">
+                            <form id="formNovaAula">
+                                <div class="mb-3">
+                                    <label for="aulaModuloSelect" class="form-label text-light">Módulo de Destino</label>
+                                    <select id="aulaModuloSelect" class="form-select" required></select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="aulaTitulo" class="form-label text-light">Título da Aula</label>
+                                        <input type="text" id="aulaTitulo" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="aulaTipo" class="form-label text-light">Tipo de Conteúdo</label>
+                                        <select id="aulaTipo" class="form-select" required>
+                                            <option value="Video">Vídeo</option>
+                                            <option value="Documento">Documento/Texto</option>
+                                            <option value="Exercicio">Questionário</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="aulaUrl" class="form-label text-light">URL do Recurso</label>
+                                    <input type="url" id="aulaUrl" class="form-control" placeholder="https://..." required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="aulaOrdem" class="form-label text-light">Ordem (Posição)</label>
+                                        <input type="number" id="aulaOrdem" class="form-control" min="1" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="aulaDuracao" class="form-label text-light">Duração (Minutos)</label>
+                                        <input type="number" id="aulaDuracao" class="form-control" min="1" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info w-100">Salvar Aula</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Catalogo Alunos -->
+        <section id="view-catalogo" class="view" style="display: none;">
+            <h2 class="mb-4">Catálogo de Cursos Livres</h2>
+            <div id="catalogoGrid" class="row"></div>
+        </section>
+
+        <!-- View: Minhas Aulas / Progresso -->
+        <section id="view-minhas-aulas" class="view" style="display: none;">
+            <h2 class="mb-4">Minha Área de Estudos</h2>
+            <div id="minhasAulasContainer" class="p-4 bg-surface rounded border"></div>
+        </section>
+
+        <!-- View: Assinaturas / Financeiro -->
+        <section id="view-financeiro" class="view" style="display: none;">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Nossos Planos</h2>
+                <p class="text-secondary">Assine um de nossos planos e tenha acesso ilimitado.</p>
+            </div>
+            <div id="checkoutPlanos" class="row justify-content-center"></div>
+        </section>
+
+    </main>
+
+    <!-- Modal Novo Curso Administrativo -->
+    <div class="modal fade" id="modalNovoCurso" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form id="formCurso">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title">Cadastrar Novo Curso</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-7 mb-3">
+                                <label for="cursoTitulo" class="form-label">Título</label>
+                                <input type="text" id="cursoTitulo" class="form-control" required>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="cursoCategoria" class="form-label">Categoria Associada</label>
+                                <select id="cursoCategoria" class="form-select" required></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="cursoNivel" class="form-label">Nível Básico</label>
+                                <select id="cursoNivel" class="form-select" required>
+                                    <option value="Iniciante">Iniciante</option>
+                                    <option value="Intermediario">Intermediário</option>
+                                    <option value="Avancado">Avançado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="cursoTotalAulas" class="form-label">Qtd Total Aulas Estimada</label>
+                                <input type="number" id="cursoTotalAulas" class="form-control" min="1" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="cursoTotalHoras" class="form-label">Total Horas Estimado</label>
+                                <input type="number" id="cursoTotalHoras" class="form-control" min="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cursoDesc" class="form-label">Descrição Pública</label>
+                            <textarea id="cursoDesc" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Gravar no Banco</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Certificado -->
+    <div class="modal fade" id="modalCertificado" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Layout certificado dinâmico -->
+                <div class="modal-body pb-5">
+                    <h1 class="display-3 text-warning fw-bold mb-5 mt-4" style="text-align: center;">CERTIFICADO DE PROGRESSÃO</h1>
+                    
+                    <div class="p-4" style="text-align: center; font-size: 1.2rem;">
+                        <p class="mb-2">A Diretoria Acadêmica da Online Academy atesta que</p>
+                        <h2 class="fw-bold mb-4" style="font-size: 2.5rem; color: #f8fafc;" id="certNomeUsuario">[NOME DO ALUNO]</h2>
+                        
+                        <p class="mb-2">completou satisfatoriamente a grade horária e as aulas regulares do curso de formação livre intitulado</p>
+                        <h3 class="fw-bold text-info mb-5" id="certCursoTitulo">[TITULO DO CURSO]</h3>
+                        
+                        <p class="text-muted small mb-0">AUTENTICAÇÃO EXPEDIDORA CONFIRMADA EM:</p>
+                        <p id="certData" class="mb-5">[DATA DE EMISSÃO]</p>
+                        
+                        <div class="border border-warning d-inline-block px-5 py-3 rounded bg-dark">
+                            <p class="mb-1 text-warning small fw-bold">CHAVE DE VERIFICAÇÃO ELETRÔNICA PÚBLICA</p>
+                            <div id="certCode" style="font-family: monospace; font-size: 1.5rem; letter-spacing: 2px;">#ABCD-1234</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Checkout Pagamento -->
+    <div class="modal fade" id="modalCheckout" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title" id="checkoutTitleLabel">Check-out de Assinatura</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-muted">Plano Escolhido: <span id="checkoutPlanoNome" class="text-white fw-bold"></span></h6>
+                    <h3 class="my-3 text-primary" id="checkoutPlanoPreco"></h3>
+                    <form id="formFinalizarCheckout">
+                        <input type="hidden" id="checkoutIdPlanoInput">
+                        
+                        <div class="mb-4 mt-4">
+                            <label for="metodoPagamento" class="form-label">Meio de Pagamento Oficial</label>
+                            <select class="form-select" id="metodoPagamento" required>
+                                <option value="">- Selecione para avançar -</option>
+                                <option value="Cartao_Credito">Cartão de Crédito</option>
+                                <option value="Pix">PIX Eletrônico</option>
+                                <option value="Boleto">Boleto Bancário</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-dark p-3 rounded mb-3 border">
+                            <small class="text-secondary d-block">Simulação Segura: Ao prosseguir, transacionaremos via adquirente mockado gerando as tabelas financeiras estritas da aplicação local.</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100 p-2 fs-5">Confirmar Compra Simmulada</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação Pagamento Transacao Gateway -->
+    <div class="modal fade" id="modalRecibo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content text-center py-4">
+                <div class="modal-body">
+                    <h1 class="display-1 text-success mb-3">&#10003;</h1>
+                    <h3 class="mb-3 text-white">Transação Autorizada</h3>
+                    <p>Sua assinatura foi ativada instantaneamente.<br>Dados cruzados com sucesso no Gateway de Faturamento.</p>
+                    <div class="bg-dark p-3 mt-4 mx-3 rounded border">
+                        <small class="text-secondary text-uppercase d-block mb-1">Id Transação Universal Gateway</small>
+                        <strong class="text-info fs-5" id="reciboIdTransacao"></strong>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center mt-2">
+                    <button type="button" class="btn btn-outline-light px-5" data-bs-dismiss="modal">Fechar Recibo Oficial</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toasts Container -->
+    <div id="toastWrapper"></div>
+
+    <!-- JS dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
